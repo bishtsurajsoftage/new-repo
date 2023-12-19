@@ -18,12 +18,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Triage Issues
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8  # Specify the Python version you need
+
+      - name: Install dependencies
         run: |
-          if [ "${{ github.event_name }}" == "issues" ]; then
-            python .github/scripts/triage.py "${{ github.event.action }}" "${{ github.event.issue.number }}" "${{ github.event.issue.labels }}" "${{ secrets.GITHUB_TOKEN }}"
-          elif [ "${{ github.event_name }}" == "pull_request" ]; then
-            python .github/scripts/triage.py "${{ github.event.action }}" "${{ github.event.pull_request.number }}" "${{ github.event.pull_request.labels }}" "${{ secrets.GITHUB_TOKEN }}"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Replace with your requirements file
+
+      - name: Execute Python Script
+        run: |
+          # Replace 'your_script.py' with the actual name of your Python script
+          python my.py  
+
+    
